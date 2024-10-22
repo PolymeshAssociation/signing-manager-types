@@ -1,7 +1,7 @@
 {
-  "name": "typescript-repo-template",
+  "name": "@polymeshassociation/signing-manager-types",
   "version": "0.0.0",
-  "description": "Template repository for typescript projects",
+  "description": "Types defining the Polymesh SDK signing manager interface",
   "types": "dist/index.d.ts",
   "author": "Polymesh Association",
   "license": "ISC",
@@ -13,6 +13,9 @@
     "semantic-release": "semantic-release",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write"
+  },
+  "dependencies": {
+    "@polkadot/api": "^11.2.1"
   },
   "devDependencies": {
     "@commitlint/cli": "17.5.1",
@@ -57,5 +60,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PolymeshAssociation/signing-manager-types.git"
   }
 }
