@@ -15,7 +15,7 @@
     "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write"
   },
   "dependencies": {
-    "@polkadot/api": "^11.2.1"
+    "@polkadot/api": "15.10.2"
   },
   "devDependencies": {
     "@commitlint/cli": "17.5.1",
@@ -29,6 +29,7 @@
     "@typescript-eslint/parser": "5.57.0",
     "@zerollup/ts-transform-paths": "1.7.18",
     "cross-env": "7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "8.37.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-config-semistandard": "17.0.0",
