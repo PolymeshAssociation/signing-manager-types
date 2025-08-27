@@ -14,12 +14,14 @@ jobs:
       CI: true
     steps:
       - uses: actions/checkout@v4
+      - name: Enable corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
       - name: lint
         run: yarn lint
 
@@ -30,12 +32,14 @@ jobs:
       CI: true
     steps:
       - uses: actions/checkout@v4
+      - name: Enable corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.x'
+          node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
       - name: test
         run: yarn test
 
@@ -45,22 +49,25 @@ jobs:
     needs: [lint, test]
     steps:
       - uses: actions/checkout@v4
+      - name: Enable corepack
+        run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version: '22.x'
           cache: 'yarn'
       - name: install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn --immutable
       - name: build
         run: |
           yarn build:ts
           sed 's/dist\//.\//' package.json > dist/package.json
           cp README.md dist/README.md
+          cp yarn.lock dist/yarn.lock
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.SMT_NPM_RELEASE_TOKEN }}
         run: |
           cd dist
-          yarn --frozen-lockfile
+          yarn --immutable
           yarn semantic-release
