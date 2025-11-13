@@ -15,15 +15,15 @@
     "format": "cross-env prettier-eslint $PWD\"/src/**/*.{ts,tsx,js,jsx,json,css,md}\" --write"
   },
   "dependencies": {
-    "@polkadot/api": "11.2.1"
+    "@polkadot/api": "16.5.2"
   },
   "devDependencies": {
     "@commitlint/cli": "17.5.1",
     "@commitlint/config-conventional": "17.4.4",
     "@golevelup/ts-jest": "^0.5.6",
-    "@types/jest-when": "^3.5.5",
     "@semantic-release/changelog": "^6.0.3",
     "@types/jest": "27.4.0",
+    "@types/jest-when": "^3.5.5",
     "@types/node": "18.15.11",
     "@typescript-eslint/eslint-plugin": "5.57.0",
     "@typescript-eslint/parser": "5.57.0",
@@ -52,7 +52,7 @@
     "ts-jest": "^29.1.0",
     "ttypescript": "1.5.15",
     "typedoc": "0.23.18",
-    "typescript": "4.6.2"
+    "typescript": "4.9.5"
   },
   "config": {
     "commitizen": {
