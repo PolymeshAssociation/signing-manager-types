@@ -47,6 +47,12 @@ jobs:
     name: Building and releasing project
     runs-on: ubuntu-latest
     needs: [lint, test]
+    if: github.event_name == 'push'
+    permissions:
+      contents: write # push release commits, tags, create GitHub Releases
+      issues: write # @semantic-release/github comments on resolved issues
+      pull-requests: write # @semantic-release/github comments on merged PRs
+      id-token: write # OIDC token for npm trusted publishing
     steps:
       - uses: actions/checkout@v4
       - name: Enable corepack
@@ -61,12 +67,12 @@ jobs:
         run: |
           yarn build:ts
           sed 's/dist\//.\//' package.json > dist/package.json
-          cp README.md dist/README.md
           cp yarn.lock dist/yarn.lock
+          cp .yarnrc.yml dist/.yarnrc.yml
+          cp README.md dist/README.md
       - name: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.SMT_NPM_RELEASE_TOKEN }}
         run: |
           cd dist
           yarn --immutable
