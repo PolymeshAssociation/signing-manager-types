@@ -8,6 +8,8 @@ export { HexString } from '@polkadot/util/types';
  * Expected chain signed extensions any internal `TypeRegistry` should use
  */
 export const signedExtensions = [
+  'AuthorizeCall',
+  'CheckNonZeroSender',
   'CheckSpecVersion',
   'CheckTxVersion',
   'CheckGenesis',
@@ -15,4 +17,6 @@ export const signedExtensions = [
   'CheckNonce',
   'CheckWeight',
   'ChargeTransactionPayment',
+  'CheckMetadataHash',
+  'WeightReclaim'
 ];
