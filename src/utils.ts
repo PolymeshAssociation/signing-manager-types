@@ -17,6 +17,12 @@ export const signedExtensions = [
   'CheckNonce',
   'CheckWeight',
   'ChargeTransactionPayment',
+  'StoreCallMetadata',
   'CheckMetadataHash',
-  'WeightReclaim'
-];
+  'WeightReclaim',
+] as const;
+
+export const signedExtensionTypes = {
+  AuthorizeCall: { extrinsic: {}, payload: {} },
+  StoreCallMetadata: { extrinsic: {}, payload: {} },
+};
