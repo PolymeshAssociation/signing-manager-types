@@ -20,7 +20,7 @@ export const signedExtensions = [
   'StoreCallMetadata',
   'CheckMetadataHash',
   'WeightReclaim',
-] as const;
+];
 
 export const signedExtensionTypes = {
   AuthorizeCall: { extrinsic: {}, payload: {} },
