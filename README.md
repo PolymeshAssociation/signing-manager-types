@@ -7,6 +7,19 @@ This defines the types needed to implement a [Polymesh SDK](https://github.com/P
 
 A signing manager abstracts the cryptographic signing of transactions so the SDK is indifferent to where and how private keys are stored.
 
+### Ethereum signing managers
+
+Polymesh's `revive` pallet lets an Ethereum key dispatch any runtime call, as the account `AccountId32 = <20 byte H160> ++ [0xEE; 12]`. A signing manager holding Ethereum keys implements `EthSigningManager`, which extends `SigningManager` with a single synchronous `getEthSigner()` method. The SDK routes on the signing address, so this capability is additive — existing signing managers are unaffected, and a hybrid manager may hold both native and Ethereum keys.
+
+- `EthTransactionRequest` — the Ethereum transaction the SDK builds. Every field is supplied by the SDK, including the gas limit and the chain ID; a signer must not estimate gas, substitute its own values, or sign for whichever chain the provider happens to be connected to
+- `EthSigner` — implements `signTransaction` (returns raw signed bytes for the SDK to broadcast — preferred) and/or `sendTransaction` (the wallet broadcasts and returns the Ethereum transaction hash). At least one is required, and the SDK decides which to use from whichever is present rather than from a flag
+- `EthSignerCapabilities` — what cannot be derived from the signer's shape. Currently just `eip1559`, which defaults to `true` and is set to `false` by signers that can only encode legacy (type 0) transactions
+- `isEthSigningManager(manager)` — typeguard for consumers routing between the native and Ethereum paths
+
+A user rejecting the request should surface as an error carrying the [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193#provider-errors) code `4001`; the SDK maps that to `TransactionRejectedByUser`. Re-throwing the provider's own error, or preserving its `code` when wrapping it, is usually enough.
+
+An `EthSigningManager` still implements the whole `SigningManager` interface: `getAccounts()` returns the SS58 encoded `0xEE` accounts (not H160 hex), `setSs58Format()` is honoured when encoding them, and `getExternalSigner()` returns a `PolkadotSigner` whose `signPayload` and `signRaw` throw — an Ethereum key cannot produce a signature the chain will accept over a SCALE payload.
+
 ### Implementations
 - [Browser](https://github.com/PolymeshAssociation/browser-extension-signing-manager) Private keys are saved in a browser extension
 - [WalletConnect](https://github.com/PolymeshAssociation/walletconnect-signing-manager) Formerly WalletConnect adaptor (rebranded to Reown)
