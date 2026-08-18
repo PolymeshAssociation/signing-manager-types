@@ -9,6 +9,9 @@ import { HexString } from './utils';
  * substitute its own destination address. Doing any of those reintroduces failure modes the SDK
  * deliberately avoids (most notably wallet gas estimation, which produces a nonsensical fee on a
  * chain whose block gas limit is `u64::MAX`)
+ *
+ * @note fields are EIP-1193 wire format: 0x-prefixed hex, never `number` or `bigint`. A signer
+ *   built on viem or ethers must convert them, and map `gas` to that library's gas limit field
  */
 export interface EthTransactionRequest {
   /**
@@ -70,14 +73,12 @@ export interface EthTransactionRequest {
    */
   gasPrice?: HexString;
   /**
-   * Ethereum transaction type, always set by the SDK.
+   * Ethereum transaction type, always set by the SDK. Hex encoded like every other numeric field
    *
-   * Only legacy (0) and EIP-1559 (2) are emitted. The runtime also permits EIP-2930 (1), but the
-   * SDK has no reason to produce one — its access list means nothing on the sentinel path — so
-   * signers do not need to handle it. EIP-4844 (3) and EIP-7702 (4) are rejected by the runtime
-   * outright
+   * Only legacy (`0x0`) and EIP-1559 (`0x2`) are emitted. EIP-2930 (`0x1`) is pointless on the
+   * sentinel path, and the runtime rejects EIP-4844 (`0x3`) and EIP-7702 (`0x4`)
    */
-  type: 0 | 2;
+  type: '0x0' | '0x2';
 }
 
 /**
@@ -92,8 +93,8 @@ export interface EthSignerCapabilities {
   /**
    * Whether the signer supports EIP-1559 (type 2) transactions. Defaults to `true` when omitted.
    *
-   * Set it to `false` for signers that can only encode legacy (type 0) transactions, in which case
-   * the SDK populates `gasPrice` instead of the EIP-1559 fee fields.
+   * Set it to `false` for signers that can only encode legacy (type `0x0`) transactions, in which
+   * case the SDK populates `gasPrice` instead of the EIP-1559 fee fields.
    *
    * Note this is a question of encoding support, not of cost: the SDK sets
    * `maxPriorityFeePerGas` to zero and `maxFeePerGas` to the chain's gas price, so a type 2

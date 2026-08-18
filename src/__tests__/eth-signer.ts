@@ -47,11 +47,11 @@ describe('EthTransactionRequest', () => {
       nonce: '0x0',
       maxFeePerGas: '0x3b9aca00',
       maxPriorityFeePerGas: '0x0',
-      type: 2,
+      type: '0x2',
     };
 
     expect(request.value).toBe('0x0');
-    expect(request.type).toBe(2);
+    expect(request.type).toBe('0x2');
   });
 
   test('should accept a legacy request with no nonce, for a wallet that broadcasts', () => {
@@ -63,7 +63,7 @@ describe('EthTransactionRequest', () => {
       gas: '0x5208',
       chainId: '0x1b39',
       gasPrice: '0x3b9aca00',
-      type: 0,
+      type: '0x0',
     };
 
     expect(request.nonce).toBeUndefined();
@@ -78,11 +78,11 @@ describe('EthTransactionRequest', () => {
       value: '0x0',
       gas: '0x5208',
       chainId: '0x1b39',
-      // @ts-expect-error the SDK emits only legacy (0) and EIP-1559 (2) transactions
-      type: 1,
+      // @ts-expect-error the SDK emits only legacy (0x0) and EIP-1559 (0x2) transactions
+      type: '0x1',
     };
 
-    expect(request.type).toBe(1);
+    expect(request.type).toBe('0x1');
   });
 
   test('should not allow transaction types rejected by the runtime', () => {
@@ -93,11 +93,11 @@ describe('EthTransactionRequest', () => {
       value: '0x0',
       gas: '0x5208',
       chainId: '0x1b39',
-      // @ts-expect-error EIP-4844 (3) and EIP-7702 (4) are rejected by the runtime
-      type: 3,
+      // @ts-expect-error EIP-4844 (0x3) and EIP-7702 (0x4) are rejected by the runtime
+      type: '0x3',
     };
 
-    expect(request.type).toBe(3);
+    expect(request.type).toBe('0x3');
   });
 
   test('should require 0x-prefixed hex for the addresses', () => {
@@ -109,7 +109,7 @@ describe('EthTransactionRequest', () => {
       value: '0x0',
       gas: '0x5208',
       chainId: '0x1b39',
-      type: 0,
+      type: '0x0',
     };
 
     expect(request.to).toBe('0x0000000000000000000000000000000000000901');
